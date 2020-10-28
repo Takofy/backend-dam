@@ -1,8 +1,10 @@
 import 'reflect-metadata';
 import 'dotenv/config';
 
+import cors from 'cors';
 import express, { Request, Response, NextFunction } from 'express';
 import 'express-async-errors';
+
 import uploadConfig from '@config/upload';
 import AppError from '@shared/errors/AppError';
 import routes from './routes';
@@ -13,6 +15,11 @@ import '@shared/container';
 const app = express();
 
 app.use(express.json());
+app.use(
+  cors({
+    exposedHeaders: ['Content-Length', 'x-total-count'],
+  }),
+);
 // Nobrega AP -> confirmar se é uploadsFolder ou tmpFolder
 app.use('/files', express.static(uploadConfig.uploadsFolder));
 app.use(routes);
