@@ -27,7 +27,7 @@ export default class SessionsController {
       .leftJoinAndSelect(Store, 'store', 'store.id = us.store_id')
       .where(`us.user_id = '${user.id}'`)
       .select('store')
-      .getRawMany();
+      .getRawOne();
 
     /** Nobrega Atention Point: operand of delete must be optional ->
       /* like: password?: string;

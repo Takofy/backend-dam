@@ -6,8 +6,6 @@ import StoresController from '../controllers/StoresController';
 const storesRouter = Router();
 const storesController = new StoresController();
 
-// storesRouter.use(ensureAuthenticated);
-
 storesRouter.get('/', ensureAuthenticated, storesController.index);
 
 storesRouter.get('/:company_cnpj', storesController.show);
