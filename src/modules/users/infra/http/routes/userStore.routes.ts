@@ -10,7 +10,8 @@ const userStoreController = new UserStoreController();
 userStoreRouter.use(ensureAuthenticated);
 
 // userStoreRouter.get('/', userStoreController.index);
-// userStoreRouter.get('/show', userStoreController.show);
+
+userStoreRouter.get('/:user_id', userStoreController.show);
 
 userStoreRouter.post('/', userStoreController.create);
 

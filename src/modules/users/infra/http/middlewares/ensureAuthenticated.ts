@@ -19,7 +19,7 @@ export default function ensureAuthenticated(
   const authHeader = request.headers.authorization;
 
   if (!authHeader) {
-    throw new AppError('Não há token JWT.', 401);
+    throw new AppError('Você não é um usuário autenticado.', 401);
   }
 
   const [, token] = authHeader.split(' ');

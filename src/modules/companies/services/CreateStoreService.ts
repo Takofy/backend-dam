@@ -13,8 +13,18 @@ interface IRequest {
   nr_inscricao_estadual: number;
   nr_ccm: number;
   dt_born: Date;
-  id_company_owner: string;
   type_company: string;
+  nm_primary_color: string;
+  nm_secondary_color: string;
+  nm_tertiary_color: string;
+  path_logo: string;
+  path_backgorund: string;
+  nm_facebook: string;
+  nm_instagram: string;
+  nm_linkedin: string;
+  nm_twitter: string;
+  nm_youtube: string;
+  nm_tiktok: string;
   active: boolean;
 }
 
@@ -33,8 +43,18 @@ class CreateStoreService {
     nr_inscricao_estadual,
     nr_ccm,
     dt_born,
-    id_company_owner,
     type_company,
+    nm_primary_color,
+    nm_secondary_color,
+    nm_tertiary_color,
+    path_logo,
+    path_backgorund,
+    nm_facebook,
+    nm_instagram,
+    nm_linkedin,
+    nm_twitter,
+    nm_youtube,
+    nm_tiktok,
     active,
   }: IRequest): Promise<Store> {
     const findStoreSameName = await this.storesRepository.findByName(
@@ -54,7 +74,17 @@ class CreateStoreService {
       nr_inscricao_estadual,
       nr_ccm,
       dt_born,
-      id_company_owner,
+      nm_primary_color,
+      nm_secondary_color,
+      nm_tertiary_color,
+      path_logo,
+      path_backgorund,
+      nm_facebook,
+      nm_instagram,
+      nm_linkedin,
+      nm_twitter,
+      nm_youtube,
+      nm_tiktok,
       type_company,
       active,
     });

@@ -4,8 +4,6 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToMany,
-  JoinColumn,
 } from 'typeorm';
 
 @Entity('stores')
@@ -35,14 +33,40 @@ class Store {
   dt_born: Date;
 
   @Column()
-  id_company_owner: string;
-
-  @ManyToMany(() => Store)
-  @JoinColumn({ name: 'id_company_owner' })
-  company_owner: Store;
+  type_company: string;
 
   @Column()
-  type_company: string;
+  nm_primary_color: string;
+
+  @Column()
+  nm_secondary_color: string;
+
+  @Column()
+  nm_tertiary_color: string;
+
+  @Column()
+  path_logo: string;
+
+  @Column()
+  path_backgorund: string;
+
+  @Column()
+  nm_facebook: string;
+
+  @Column()
+  nm_instagram: string;
+
+  @Column()
+  nm_linkedin: string;
+
+  @Column()
+  nm_twitter: string;
+
+  @Column()
+  nm_youtube: string;
+
+  @Column()
+  nm_tiktok: string;
 
   @Column()
   active: boolean;

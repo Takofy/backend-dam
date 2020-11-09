@@ -8,9 +8,9 @@ const storesController = new StoresController();
 
 storesRouter.use(ensureAuthenticated);
 
-storesRouter.get('/', storesController.index);
+storesRouter.get('/', ensureAuthenticated, storesController.index);
 
-storesRouter.get('/:store_id', storesController.show);
+storesRouter.get('/:company_cnpj', storesController.show);
 
 storesRouter.post('/', storesController.create);
 
