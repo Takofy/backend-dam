@@ -9,6 +9,9 @@ interface IRequest {
   nm_campaign_name: string;
   nm_campaign_description: string;
   path_image: string;
+  path_icon: string;
+  dt_publication: Date;
+  dt_expiration: Date;
   store_owner_id: string;
   user_owner_id?: string | undefined;
   active: boolean;
@@ -25,6 +28,9 @@ class CreateCampaignService {
     nm_campaign_name,
     nm_campaign_description,
     path_image,
+    path_icon,
+    dt_publication,
+    dt_expiration,
     user_owner_id,
     store_owner_id,
     active,
@@ -43,6 +49,9 @@ class CreateCampaignService {
         nm_campaign_name,
         nm_campaign_description,
         path_image,
+        path_icon,
+        dt_publication,
+        dt_expiration,
         user_owner_id,
         store_owner_id,
         active,

@@ -28,6 +28,15 @@ class Campaign {
   path_image: string;
 
   @Column()
+  path_icon: string;
+
+  @Column()
+  dt_publication: Date;
+
+  @Column()
+  dt_expiration: Date;
+
+  @Column()
   user_owner_id: string;
 
   @ManyToOne(() => User)
