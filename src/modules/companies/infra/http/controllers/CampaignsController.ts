@@ -3,6 +3,7 @@ import { container } from 'tsyringe';
 import { getRepository } from 'typeorm';
 
 import CreateCampaignService from '@modules/companies/services/CreateCampaignService';
+import FileUploadService from '@modules/companies/services/FileUploadService';
 
 import UserStore from '@modules/users/infra/typeorm/entities/UserStore';
 import Store from '@modules/companies/infra/typeorm/entities/Store';
@@ -41,11 +42,44 @@ export default class ProjectsController {
   }
 
   public async create(request: Request, response: Response): Promise<Response> {
-    const data = request.body;
+    const fileUploadService = container.resolve(FileUploadService);
+
+    if (request.file) {
+      // Upload file and return hashed file name
+      const fileUploaded = await fileUploadService.execute({
+        fileName: request.file.filename,
+      });
+
+      const hashedImgName = request.file.filename;
+    } else {
+      const hashedImgName = 'campaign-default-image.jpg';
+    }
+
+    if (request.body.path_icon) {
+      const pathIcon = request.body.path_icon;
+    } else {
+      const pathIcon = 'campaign-default-icon.png';
+    }
+
+    const fileData = {
+      nm_campaign_name: request.body.nm_campaign_name || 'Sem titulo',
+      nm_campaign_description: request.body.nm_campaign_description || '',
+      path_image:
+        `https://bsn-dam.s3.amazonaws.com/${hashedImgName}` ||
+        'https://bsn-dam.s3.amazonaws.com/campaign-default-image.jpg',
+      path_icon:
+        `https://bsn-dam.s3.amazonaws.com/${pathIcon}` ||
+        'https://bsn-dam.s3.amazonaws.com/campaign-default-icon.png',
+      dt_publication: request.body.dt_publication || '2020-01-01',
+      dt_expiration: request.body.dt_expiration || '2020-01-01',
+      user_owner_id: request.body.user_owner_id,
+      store_owner_id: request.body.store_owner_id,
+      active: true,
+    };
 
     const createCampaign = container.resolve(CreateCampaignService);
 
-    const campaign = await createCampaign.execute(data);
+    const campaign = await createCampaign.execute(fileData);
 
     return response.json(campaign);
   }
