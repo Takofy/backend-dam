@@ -8,9 +8,7 @@ const campaignsController = new CampaignsController();
 
 campaignsRouter.use(ensureAuthenticated);
 
-campaignsRouter.get('/', campaignsController.index);
-
-campaignsRouter.get('/:store_id', campaignsController.show);
+campaignsRouter.get('/', campaignsController.show);
 
 campaignsRouter.post('/', campaignsController.create);
 
