@@ -52,7 +52,7 @@ export default class ProjectsController {
 
       const hashedImgName = request.file.filename;
     } else {
-      const hashedImgName = 'campaign-default-image.jpg';
+      const hashedImgName = 'recebido-campaign-default-image.jpg';
     }
 
     if (request.body.path_icon) {
@@ -62,6 +62,7 @@ export default class ProjectsController {
     }
 
     const imgPath = `${process.env.STORAGE_BASE_PATH}${hashedImgName}`;
+    console.log(imgPath);
     const iconPath = `${process.env.STORAGE_BASE_PATH}${iconName}`;
     const imgBasePath = `${process.env.STORAGE_BASE_PATH}campaign-default-image.jpg`;
     const iconBasePath = `${process.env.STORAGE_BASE_PATH}campaign-default-icon.png`;
