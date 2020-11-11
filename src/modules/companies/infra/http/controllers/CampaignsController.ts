@@ -52,7 +52,7 @@ export default class ProjectsController {
 
       const hashedImgName = request.file.filename;
     } else {
-      const hashedImgName = 'recebido-campaign-default-image.jpg';
+      const hashedImgName = 'campaign-default-image.jpg';
     }
 
     if (request.body.path_icon) {
