@@ -56,20 +56,21 @@ export default class ProjectsController {
     }
 
     if (request.body.path_icon) {
-      const pathIcon = request.body.path_icon;
+      const iconName = request.body.path_icon;
     } else {
-      const pathIcon = 'campaign-default-icon.png';
+      const iconName = 'campaign-default-icon.png';
     }
+
+    const imgPath = `${process.env.STORAGE_BASE_PATH}${hashedImgName}`;
+    const iconPath = `${process.env.STORAGE_BASE_PATH}${iconName}`;
+    const imgBasePath = `${process.env.STORAGE_BASE_PATH}campaign-default-image.jpg`;
+    const iconBasePath = `${process.env.STORAGE_BASE_PATH}campaign-default-icon.png`;
 
     const fileData = {
       nm_campaign_name: request.body.nm_campaign_name || 'Sem titulo',
       nm_campaign_description: request.body.nm_campaign_description || '',
-      path_image:
-        `https://bsn-dam.s3.amazonaws.com/${hashedImgName}` ||
-        'https://bsn-dam.s3.amazonaws.com/campaign-default-image.jpg',
-      path_icon:
-        `https://bsn-dam.s3.amazonaws.com/${pathIcon}` ||
-        'https://bsn-dam.s3.amazonaws.com/campaign-default-icon.png',
+      path_image: imgPath || imgBasePath,
+      path_icon: iconPath || iconBasePath,
       dt_publication: request.body.dt_publication || '2020-01-01',
       dt_expiration: request.body.dt_expiration || '2020-01-01',
       user_owner_id: request.body.user_owner_id,

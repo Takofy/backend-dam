@@ -47,8 +47,10 @@ export default class FilesController {
     //   active: true,
     // };
 
-    const basePath = request.file.filename;
-    // const basePath = `${process.env.STORAGE_BASE_PATH}/${request.file.filename}`;
+    // const fileName = request.file.filename.replace(/\s/g, '-');
+    const fileName = request.file.filename;
+    const filePath = `${process.env.STORAGE_BASE_PATH}${fileName}`;
+
     const fileType = request.file.originalname.toLowerCase().split('.').pop();
 
     const fileData = {
@@ -59,8 +61,8 @@ export default class FilesController {
       nm_subtype: request.body.nm_subtype || 'image',
       nm_mime: request.file.mimetype || 'non-mime',
       nm_s3_version: request.body.nm_s3_version || '',
-      nm_s3_name: request.file.filename || '',
-      nm_url: basePath || '',
+      nm_s3_name: fileName || '',
+      nm_url: filePath || '',
       campaign_owner_id: request.body.campaign_owner_id,
       user_owner_id: request.body.user_owner_id,
       store_owner_id: request.body.store_owner_id,
