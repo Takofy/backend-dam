@@ -36,12 +36,27 @@ export default class ProjectsController {
 
     const campaigns = await campaignsRepository.find({
       where: { store_owner_id: storeId, active: true },
+      order: {
+        updated_at: 'DESC',
+      },
     });
 
     return response.json(campaigns);
   }
 
   public async create(request: Request, response: Response): Promise<Response> {
+    // Pega id do usuário e id da empresa do usuário logado
+    const userStoreRepository = getRepository(UserStore);
+
+    const userId = request.user.id;
+
+    const store = await userStoreRepository.findOne({
+      where: { user_id: userId },
+    });
+
+    const storeId = store.store_id;
+
+    // Upload imagem da campanha
     const fileUploadService = container.resolve(FileUploadService);
 
     if (request.file) {
@@ -62,20 +77,19 @@ export default class ProjectsController {
     }
 
     const imgPath = `${process.env.STORAGE_BASE_PATH}${hashedImgName}`;
-    console.log(imgPath);
     const iconPath = `${process.env.STORAGE_BASE_PATH}${iconName}`;
-    const imgBasePath = `${process.env.STORAGE_BASE_PATH}campaign-default-image.jpg`;
-    const iconBasePath = `${process.env.STORAGE_BASE_PATH}campaign-default-icon.png`;
+    const imgDefaultPath = `${process.env.STORAGE_BASE_PATH}campaign-default-image.jpg`;
+    const iconDefaultPath = `${process.env.STORAGE_BASE_PATH}campaign-default-icon.png`;
 
     const fileData = {
       nm_campaign_name: request.body.nm_campaign_name || 'Sem titulo',
       nm_campaign_description: request.body.nm_campaign_description || '',
-      path_image: imgPath || imgBasePath,
-      path_icon: iconPath || iconBasePath,
+      path_image: imgPath || imgDefaultPath,
+      path_icon: iconPath || iconDefaultPath,
       dt_publication: request.body.dt_publication || '2020-01-01',
       dt_expiration: request.body.dt_expiration || '2020-01-01',
-      user_owner_id: request.body.user_owner_id,
-      store_owner_id: request.body.store_owner_id,
+      user_owner_id: userId,
+      store_owner_id: storeId,
       active: true,
     };
 

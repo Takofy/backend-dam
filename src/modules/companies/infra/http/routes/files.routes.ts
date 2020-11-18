@@ -13,6 +13,8 @@ const upload = multer(uploadConfig.multer);
 
 filesRouter.get('/:campaign_id', filesController.index);
 
+filesRouter.get('/file/:file_id', filesController.show);
+
 filesRouter.post(
   '/',
   ensureAuthenticated,

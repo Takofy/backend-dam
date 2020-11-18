@@ -5,6 +5,7 @@ import { getRepository } from 'typeorm';
 import CreateFileService from '@modules/companies/services/CreateFileService';
 import FileUploadService from '@modules/companies/services/FileUploadService';
 
+import UserStore from '@modules/users/infra/typeorm/entities/UserStore';
 import File from '@modules/companies/infra/typeorm/entities/File';
 
 export default class FilesController {
@@ -13,13 +14,41 @@ export default class FilesController {
 
     const filesRepository = getRepository(File);
     const files = await filesRepository.find({
-      where: { campaign_owner_id: campaign_id },
+      where: { campaign_owner_id: campaign_id, active: true },
+      order: {
+        updated_at: 'DESC',
+      },
     });
 
     return response.json(files);
   }
 
+  public async show(request: Request, response: Response): Promise<Response> {
+    const { file_id } = request.params;
+
+    const filesRepository = getRepository(File);
+
+    const file = await filesRepository.findOne({
+      where: { id: file_id },
+    });
+
+    return response.json(file);
+  }
+
   public async create(request: Request, response: Response): Promise<Response> {
+    console.log(request.file);
+    return;
+    const userStoreRepository = getRepository(UserStore);
+
+    const userId = request.user.id;
+
+    const store = await userStoreRepository.findOne({
+      where: { user_id: userId },
+    });
+
+    const storeId = store.store_id;
+
+    // upload do ativo
     const fileUploadService = container.resolve(FileUploadService);
 
     // Upload file and return hashed file name
@@ -64,27 +93,10 @@ export default class FilesController {
       nm_s3_name: fileName || '',
       nm_url: filePath || '',
       campaign_owner_id: request.body.campaign_owner_id,
-      user_owner_id: request.body.user_owner_id,
-      store_owner_id: request.body.store_owner_id,
+      user_owner_id: userId,
+      store_owner_id: storeId,
       active: true,
     };
-
-    // const fileData = {
-    //   nm_title: request.body.nm_title || 'Sem titulo',
-    //   nm_description: request.body.nm_description || '',
-    //   nm_original_file_name:
-    //     request.body.nm_original_file_name || 'non-original-name',
-    //   nm_type: request.body.nm_type || 'non-type',
-    //   nm_subtype: request.body.nm_subtype || '',
-    //   nm_mime: request.body.nm_mime || 'non-mime',
-    //   nm_s3_version: request.body.nm_s3_version || '',
-    //   nm_s3_name: request.body.nm_s3_name || '',
-    //   nm_url: request.body.nm_url || '',
-    //   campaign_owner_id: request.body.campaign_owner_id,
-    //   user_owner_id: request.body.user_owner_id,
-    //   store_owner_id: request.body.store_owner_id,
-    //   active: true,
-    // };
 
     const createFile = container.resolve(CreateFileService);
 
