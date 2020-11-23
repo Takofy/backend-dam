@@ -58,8 +58,6 @@ export default class FilesController {
     // return;
 
     await files.forEach(file => {
-      console.log(file);
-
       // upload do ativo
       const fileUploadService = container.resolve(FileUploadService);
 
@@ -75,9 +73,10 @@ export default class FilesController {
 
       // Tamanho do arquivo
       const size = partial({ locale: 'de' });
-      // const fileSize = size(file.size);
-      const fileSize = 0;
+      const fileSize = size(file.size);
+      // const fileSize = 0;
 
+      // Salva url com "+" no lugar de " "
       const s3FileName = file.filename.replace(/\s/g, '+');
       const fileName = file.filename;
       const filePath = `${process.env.STORAGE_BASE_PATH}${s3FileName}`;
@@ -104,7 +103,7 @@ export default class FilesController {
         nr_code: request.body.nr_code || 0,
         nr_width: fileWidh || 0,
         nr_height: fileHeight || 0,
-        nr_size: file.size || 0,
+        nr_size: fileSize || 0,
         dt_publication: request.body.dt_publication || '2020-01-01',
         dt_expiration: request.body.dt_expiration || '2020-01-01',
         campaign_owner_id: request.body.campaign_owner_id,

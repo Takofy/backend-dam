@@ -54,7 +54,7 @@ class File {
   nr_height: number;
 
   @Column()
-  nr_size: number;
+  nr_size: string;
 
   @Column()
   dt_publication: Date;

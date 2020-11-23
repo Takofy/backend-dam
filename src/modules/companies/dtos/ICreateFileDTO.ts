@@ -11,7 +11,7 @@ export default interface ICreateFileDTO {
   nr_code: number;
   nr_width: number;
   nr_height: number;
-  nr_size: number;
+  nr_size: string;
   dt_publication: Date;
   dt_expiration: Date;
   campaign_owner_id: string;
