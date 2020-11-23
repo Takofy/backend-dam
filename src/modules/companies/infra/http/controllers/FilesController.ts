@@ -99,7 +99,7 @@ export default class FilesController {
         nm_subtype: request.body.nm_subtype || 'image',
         nm_mime: fileMime || 'non-mime',
         nm_s3_version: request.body.nm_s3_version || '',
-        nm_s3_name: s3FileName || '',
+        nm_s3_name: fileName || '',
         nm_url: filePath || '',
         nr_code: request.body.nr_code || 0,
         nr_width: fileWidh || 0,
