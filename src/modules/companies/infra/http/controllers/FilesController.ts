@@ -104,7 +104,7 @@ export default class FilesController {
         nr_code: request.body.nr_code || 0,
         nr_width: fileWidh || 0,
         nr_height: fileHeight || 0,
-        nr_size: fileSize || 0,
+        nr_size: file.size || 0,
         dt_publication: request.body.dt_publication || '2020-01-01',
         dt_expiration: request.body.dt_expiration || '2020-01-01',
         campaign_owner_id: request.body.campaign_owner_id,
