@@ -45,6 +45,24 @@ class File {
   nm_url: string;
 
   @Column()
+  nr_code: number;
+
+  @Column()
+  nr_width: number;
+
+  @Column()
+  nr_height: number;
+
+  @Column()
+  nr_size: number;
+
+  @Column()
+  dt_publication: Date;
+
+  @Column()
+  dt_expiration: Date;
+
+  @Column()
   user_owner_id: string;
 
   @Column()

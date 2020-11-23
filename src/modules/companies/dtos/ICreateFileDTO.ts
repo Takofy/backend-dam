@@ -8,6 +8,12 @@ export default interface ICreateFileDTO {
   nm_s3_version: string;
   nm_s3_name: string;
   nm_url: string;
+  nr_code: number;
+  nr_width: number;
+  nr_height: number;
+  nr_size: number;
+  dt_publication: Date;
+  dt_expiration: Date;
   campaign_owner_id: string;
   user_owner_id: string;
   store_owner_id: string;

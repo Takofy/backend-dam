@@ -18,7 +18,7 @@ filesRouter.get('/file/:file_id', filesController.show);
 filesRouter.post(
   '/',
   ensureAuthenticated,
-  upload.single('file'),
+  upload.array('file'),
   filesController.create,
 );
 
