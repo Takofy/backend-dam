@@ -78,9 +78,9 @@ export default class FilesController {
       // const fileSize = size(file.size);
       const fileSize = 0;
 
-      // const s3FileName = file.filename.replace(/\s/g, '-');
+      const s3FileName = file.filename.replace(/\s/g, '+');
       const fileName = file.filename;
-      const filePath = `${process.env.STORAGE_BASE_PATH}${fileName}`;
+      const filePath = `${process.env.STORAGE_BASE_PATH}${s3FileName}`;
 
       const fileMime = file.mimetype.toLowerCase().split('/').shift();
       const fileType = file.mimetype.toLowerCase().split('/').pop();
