@@ -21,6 +21,9 @@ import FilesRepository from '@modules/companies/infra/typeorm/repositories/Files
 import ITagsRepository from '@modules/companies/repositories/ITagsRepository';
 import TagsRepository from '@modules/companies/infra/typeorm/repositories/TagsRepository';
 
+import IFileTagsRepository from '@modules/companies/repositories/IFileTagsRepository';
+import FileTagsRepository from '@modules/companies/infra/typeorm/repositories/FileTagsRepository';
+
 container.registerSingleton<IStoresRepository>(
   'StoresRepository',
   StoresRepository,
@@ -47,3 +50,8 @@ container.registerSingleton<IFilesRepository>(
 );
 
 container.registerSingleton<ITagsRepository>('TagsRepository', TagsRepository);
+
+container.registerSingleton<IFileTagsRepository>(
+  'FileTagsRepository',
+  FileTagsRepository,
+);

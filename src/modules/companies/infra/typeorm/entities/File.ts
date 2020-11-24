@@ -5,12 +5,14 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToMany,
   JoinColumn,
 } from 'typeorm';
 
 import User from '@modules/users/infra/typeorm/entities/User';
 import Store from './Store';
 import Campaign from './Campaign';
+import FileTags from './FileTags';
 
 @Entity('files')
 class File {
@@ -91,6 +93,9 @@ class File {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @OneToMany(() => FileTags, fileTag => fileTag.tag)
+  fileTags: FileTags[];
 }
 
 export default File;

@@ -8,6 +8,7 @@ import campaignsRouter from '@modules/companies/infra/http/routes/campaigns.rout
 import filesRouter from '@modules/companies/infra/http/routes/files.routes';
 import dashboardRouter from '@modules/companies/infra/http/routes/dashboard.routes';
 import tagsRouter from '@modules/companies/infra/http/routes/tags.routes';
+import fileTagsRouter from '@modules/companies/infra/http/routes/fileTags.routes';
 
 const routes = Router();
 
@@ -19,5 +20,6 @@ routes.use('/campaigns', campaignsRouter);
 routes.use('/files', filesRouter);
 routes.use('/dashboard', dashboardRouter);
 routes.use('/tags', tagsRouter);
+routes.use('/file-tags', fileTagsRouter);
 
 export default routes;

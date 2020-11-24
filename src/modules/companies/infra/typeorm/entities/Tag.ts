@@ -4,12 +4,12 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  // OneToMany,
+  OneToMany,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
 
-// import FileTags from './FileTags';
+import FileTags from './FileTags';
 import Store from './Store';
 
 @Entity('tags')
@@ -39,8 +39,8 @@ class Tag {
   @JoinColumn({ name: 'store_owner_id' })
   store: Store;
 
-  // @OneToMany(type => FileTags, fileTag => fileTag.tag)
-  // fileTags: FileTags[];
+  @OneToMany(() => FileTags, fileTag => fileTag.tag)
+  fileTags: FileTags[];
 }
 
 export default Tag;
