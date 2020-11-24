@@ -9,7 +9,7 @@ import UserStore from '@modules/users/infra/typeorm/entities/UserStore';
 import Store from '@modules/companies/infra/typeorm/entities/Store';
 import Campaign from '@modules/companies/infra/typeorm/entities/Campaign';
 
-export default class ProjectsController {
+export default class CampaignsController {
   public async index(request: Request, response: Response): Promise<Response> {
     const campaignsRepository = getRepository(Campaign);
 

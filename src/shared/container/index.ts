@@ -18,6 +18,9 @@ import CampaignsRepository from '@modules/companies/infra/typeorm/repositories/C
 import IFilesRepository from '@modules/companies/repositories/IFilesRepository';
 import FilesRepository from '@modules/companies/infra/typeorm/repositories/FilesRepository';
 
+import ITagsRepository from '@modules/companies/repositories/ITagsRepository';
+import TagsRepository from '@modules/companies/infra/typeorm/repositories/TagsRepository';
+
 container.registerSingleton<IStoresRepository>(
   'StoresRepository',
   StoresRepository,
@@ -42,3 +45,5 @@ container.registerSingleton<IFilesRepository>(
   'FilesRepository',
   FilesRepository,
 );
+
+container.registerSingleton<ITagsRepository>('TagsRepository', TagsRepository);

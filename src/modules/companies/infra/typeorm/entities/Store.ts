@@ -2,9 +2,12 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
+  OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
+import Tag from './Tag';
 
 @Entity('stores')
 class Store {
@@ -76,6 +79,9 @@ class Store {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @OneToMany(() => Tag, tag => tag.store)
+  tags: Tag[];
 }
 
 export default Store;
