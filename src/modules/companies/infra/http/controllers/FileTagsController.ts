@@ -39,12 +39,22 @@ export default class FileTagsController {
   }
 
   public async create(request: Request, response: Response): Promise<Response> {
-    const data = request.body;
+    const { tag_id } = request.body;
 
-    const createFileTag = container.resolve(CreateFileTagService);
+    const fileIds = request.body.files;
 
-    const fileTag = await createFileTag.execute(data);
+    const allFiles = await Promise.all(
+      fileIds.map(async file => {
+        const newData = { file_id: file, tag_id, active: true };
 
-    return response.status(200).json(fileTag);
+        const createFileTag = container.resolve(CreateFileTagService);
+
+        const fileTag = createFileTag.execute(newData);
+
+        return await fileTag;
+      }),
+    );
+
+    return response.status(200).json(allFiles);
   }
 }
