@@ -117,4 +117,17 @@ export default class FilesController {
 
     return response.status(200).json(allFiles);
   }
+
+  public async update(request: Request, response: Response): Promise<Response> {
+    // const fileId = request.params.file_id;
+
+    // const fileUpdateService = container.resolve(fileUpdateService);
+
+    // const file = await fileUpdateService.execute({
+    //   fileInfo: fileId,
+    // });
+
+    // return response.json(file);
+    return response.send();
+  }
 }

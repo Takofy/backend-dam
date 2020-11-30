@@ -7,6 +7,7 @@ import CreateFileTagService from '@modules/companies/services/CreateFileTagServi
 
 import FileTags from '@modules/companies/infra/typeorm/entities/FileTags';
 import Tag from '@modules/companies/infra/typeorm/entities/Tag';
+import { idText } from 'typescript';
 
 export default class FileTagsController {
   public async index(request: Request, response: Response): Promise<Response> {
@@ -56,5 +57,19 @@ export default class FileTagsController {
     );
 
     return response.status(200).json(allFiles);
+  }
+
+  public async delete(request: Request, response: Response): Promise<Response> {
+    const fileTagsId = request.body.ids;
+
+    try {
+      const fileTagsRepository = getRepository(FileTags);
+
+      await fileTagsRepository.delete(fileTagsId);
+
+      return response.status(200).send();
+    } catch (error) {
+      throw new AppError(error);
+    }
   }
 }

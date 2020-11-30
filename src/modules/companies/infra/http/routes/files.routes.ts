@@ -4,12 +4,14 @@ import uploadConfig from '@config/upload';
 
 import ensureAuthenticated from '@modules/users/infra/http/middlewares/ensureAuthenticated';
 import FilesController from '../controllers/FilesController';
-import FilesUploadController from '../controllers/FilesUploadController';
+// import FilesUploadController from '../controllers/FilesUploadController';
 
 const filesRouter = Router();
 const filesController = new FilesController();
 // const filesUploadController = new FilesUploadController();
 const upload = multer(uploadConfig.multer);
+
+filesRouter.use(ensureAuthenticated);
 
 filesRouter.get('/:campaign_id', filesController.index);
 
@@ -22,10 +24,6 @@ filesRouter.post(
   filesController.create,
 );
 
-// filesRouter.post(
-//   '/upload',
-//   upload.single('file'),
-//   filesUploadController.update,
-// );
+filesRouter.patch('/file_id', filesController.update);
 
 export default filesRouter;

@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import { getRepository } from 'typeorm';
 
+import AppError from '@shared/errors/AppError';
+
 import CreateCampaignService from '@modules/companies/services/CreateCampaignService';
 import FileUploadService from '@modules/companies/services/FileUploadService';
 
@@ -98,5 +100,19 @@ export default class CampaignsController {
     const campaign = await createCampaign.execute(fileData);
 
     return response.json(campaign);
+  }
+
+  public async delete(request: Request, response: Response): Promise<Response> {
+    const campaignId = request.params.campaign_id;
+
+    try {
+      const campaignsRepository = getRepository(Campaign);
+
+      await campaignsRepository.delete(campaignId);
+
+      return response.status(200).send();
+    } catch (error) {
+      throw new AppError(error);
+    }
   }
 }
