@@ -14,6 +14,6 @@ fileTagsRouter.get('/:file_id', fileTagsController.show);
 
 fileTagsRouter.post('/', fileTagsController.create);
 
-fileTagsRouter.delete('/', fileTagsController.delete);
+fileTagsRouter.delete('/:filetag_id', fileTagsController.delete);
 
 export default fileTagsRouter;

@@ -147,7 +147,7 @@ export default class FilesController {
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {
-    const fileId = request.body.file_id;
+    const fileId = request.params.file_id;
 
     try {
       const deleteFile = container.resolve(DeleteFileService);

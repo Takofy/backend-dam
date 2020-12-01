@@ -60,12 +60,12 @@ export default class FileTagsController {
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {
-    const fileTagsId = request.body.ids;
+    const fileTagId = request.params.filetag_id;
 
     try {
       const fileTagsRepository = getRepository(FileTags);
 
-      await fileTagsRepository.delete(fileTagsId);
+      await fileTagsRepository.delete(fileTagId);
 
       return response.status(200).send();
     } catch (error) {

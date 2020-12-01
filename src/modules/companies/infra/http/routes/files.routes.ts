@@ -26,6 +26,6 @@ filesRouter.post(
 
 filesRouter.put('/', filesController.update);
 
-filesRouter.delete('/', filesController.delete);
+filesRouter.delete('/:file_id', filesController.delete);
 
 export default filesRouter;
