@@ -7,7 +7,6 @@ import CreateFileTagService from '@modules/companies/services/CreateFileTagServi
 
 import FileTags from '@modules/companies/infra/typeorm/entities/FileTags';
 import Tag from '@modules/companies/infra/typeorm/entities/Tag';
-import { idText } from 'typescript';
 
 export default class FileTagsController {
   public async index(request: Request, response: Response): Promise<Response> {
