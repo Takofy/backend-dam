@@ -6,6 +6,7 @@ import { partial } from 'filesize';
 
 import CreateFileService from '@modules/companies/services/CreateFileService';
 import FileUploadService from '@modules/companies/services/FileUploadService';
+import UpdateFileService from '@modules/companies/services/UpdateFileService';
 
 import UserStore from '@modules/users/infra/typeorm/entities/UserStore';
 import File from '@modules/companies/infra/typeorm/entities/File';
@@ -119,15 +120,26 @@ export default class FilesController {
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
-    // const fileId = request.params.file_id;
+    const {
+      file_id,
+      nm_title,
+      nm_description,
+      dt_expiration,
+      campaign_owner_id,
+      active,
+    } = request.body;
 
-    // const fileUpdateService = container.resolve(fileUpdateService);
+    const updateFileService = container.resolve(UpdateFileService);
 
-    // const file = await fileUpdateService.execute({
-    //   fileInfo: fileId,
-    // });
+    const file = await updateFileService.execute({
+      file_id,
+      nm_title,
+      nm_description,
+      dt_expiration,
+      campaign_owner_id,
+      active,
+    });
 
-    // return response.json(file);
-    return response.send();
+    return response.json(file);
   }
 }

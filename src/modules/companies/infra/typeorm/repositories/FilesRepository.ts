@@ -12,6 +12,12 @@ class FilesRepository implements IFilesRepository {
     this.ormRepository = getRepository(File);
   }
 
+  public async findById(id: string): Promise<File | undefined> {
+    const file = await this.ormRepository.findOne(id);
+
+    return file;
+  }
+
   public async findByNameAndCampaign(
     nm_original_file_name: string,
     campaign_owner_id: string,

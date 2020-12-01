@@ -6,6 +6,7 @@ export default interface IFilesRepository {
     nm_s3_version: string,
     campaign_owner_id: string,
   ): Promise<File | undefined>;
+  findById(id: string): Promise<File | undefined>;
   create(data: ICreateFileDTO): Promise<File>;
   save(file: File): Promise<File>;
 }

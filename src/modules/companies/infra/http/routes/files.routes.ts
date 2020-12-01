@@ -24,6 +24,6 @@ filesRouter.post(
   filesController.create,
 );
 
-filesRouter.patch('/file_id', filesController.update);
+filesRouter.put('/', filesController.update);
 
 export default filesRouter;
