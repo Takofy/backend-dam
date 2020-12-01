@@ -7,22 +7,60 @@ import CreateTagService from '@modules/companies/services/CreateTagService';
 
 import UserStore from '@modules/users/infra/typeorm/entities/UserStore';
 import Store from '@modules/companies/infra/typeorm/entities/Store';
+import FileTags from '@modules/companies/infra/typeorm/entities/FileTags';
 import Tag from '@modules/companies/infra/typeorm/entities/Tag';
 
 export default class TagsController {
   public async index(request: Request, response: Response): Promise<Response> {
+    const userId = request.user.id;
+
+    const userStoreRepository = getRepository(UserStore);
+    const store = await userStoreRepository
+      .createQueryBuilder('us')
+      .leftJoinAndSelect(Store, 'store', 'store.id = us.store_id')
+      .where(`us.user_id = '${userId}'`)
+      .select('store')
+      .getRawOne();
+
+    const storeId = store.store_id;
+
     const tagsRepository = getRepository(Tag);
 
-    const tags = await tagsRepository.find();
+    const tags = await tagsRepository
+      .createQueryBuilder('tag')
+      .leftJoinAndSelect(FileTags, 'filetag', 'filetag.tag_id = tag.id')
+      .where(`tag.store_owner_id = '${storeId}'`)
+      .select()
+      .getRawMany();
 
     return response.json(tags);
+
+    // const tags = await tagsRepository.find({
+    //   where: { store_owner_id: storeId },
+    // });
+
+    // return response.json(tags);
   }
 
   public async show(request: Request, response: Response): Promise<Response> {
     try {
+      const userId = request.user.id;
+
+      const userStoreRepository = getRepository(UserStore);
+      const store = await userStoreRepository
+        .createQueryBuilder('us')
+        .leftJoinAndSelect(Store, 'store', 'store.id = us.store_id')
+        .where(`us.user_id = '${userId}'`)
+        .select('store')
+        .getRawOne();
+
+      const storeId = store.store_id;
+
       const tagId = request.params.tag_id;
       const tagsRepository = getRepository(Tag);
-      const tags = await tagsRepository.findOne(tagId);
+      const tags = await tagsRepository.findOne({
+        where: { id: tagId, store_owner_id: storeId },
+      });
 
       if (!tags) {
         throw new AppError('Tag não encontrada.');

@@ -26,7 +26,7 @@ export default class FileTagsController {
         .createQueryBuilder('ft')
         .leftJoinAndSelect(Tag, 'tag', 'tag.id = ft.tag_id')
         .where(`ft.file_id = '${fileId}'`)
-        .select(['tag.id', 'tag.nm_tag'])
+        .select(['ft.id as association_id', 'tag.id', 'tag.nm_tag as nm_tag'])
         .getRawMany();
 
       if (!filetags) {
