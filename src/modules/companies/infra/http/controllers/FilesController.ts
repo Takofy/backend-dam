@@ -4,9 +4,12 @@ import { getRepository } from 'typeorm';
 import sizeOf from 'image-size';
 import { partial } from 'filesize';
 
+import AppError from '@shared/errors/AppError';
+
 import CreateFileService from '@modules/companies/services/CreateFileService';
 import FileUploadService from '@modules/companies/services/FileUploadService';
 import UpdateFileService from '@modules/companies/services/UpdateFileService';
+import DeleteFileService from '@modules/companies/services/DeleteFileService';
 
 import UserStore from '@modules/users/infra/typeorm/entities/UserStore';
 import File from '@modules/companies/infra/typeorm/entities/File';
@@ -141,5 +144,25 @@ export default class FilesController {
     });
 
     return response.json(file);
+  }
+
+  public async delete(request: Request, response: Response): Promise<Response> {
+    const fileId = request.body.file_id;
+
+    try {
+      const deleteFile = container.resolve(DeleteFileService);
+
+      await deleteFile.execute({
+        file_id: fileId,
+      });
+
+      const filesRepository = getRepository(File);
+
+      await filesRepository.delete(fileId);
+
+      return response.status(200).send();
+    } catch (error) {
+      throw new AppError(error);
+    }
   }
 }

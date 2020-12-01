@@ -32,7 +32,7 @@ class UpdateUserAvatarService {
     const file = await this.filesRepository.findById(file_id);
 
     if (!file) {
-      throw new AppError('Arquivo não encontrado.', 401);
+      throw new AppError('Ativo não encontrado.', 401);
     }
 
     if (nm_title) {
