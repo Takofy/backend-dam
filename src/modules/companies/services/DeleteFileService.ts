@@ -12,7 +12,7 @@ interface IRequest {
 }
 
 @injectable()
-class UpdateUserAvatarService {
+class DeleteFileService {
   constructor(
     @inject('FilesRepository')
     private filesRepository: IFilesRepository,
@@ -34,4 +34,4 @@ class UpdateUserAvatarService {
   }
 }
 
-export default UpdateUserAvatarService;
+export default DeleteFileService;

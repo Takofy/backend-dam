@@ -13,6 +13,12 @@ class CampaignsReository implements ICampaignsRepository {
     this.ormRepository = getRepository(Campaign);
   }
 
+  public async findById(id: string): Promise<Campaign | undefined> {
+    const campaign = await this.ormRepository.findOne(id);
+
+    return campaign;
+  }
+
   // public async findByCampaign(
   //   nm_campaign_name: string,
   //   store_owner_id: string,

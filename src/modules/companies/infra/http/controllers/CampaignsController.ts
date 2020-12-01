@@ -6,6 +6,7 @@ import AppError from '@shared/errors/AppError';
 
 import CreateCampaignService from '@modules/companies/services/CreateCampaignService';
 import FileUploadService from '@modules/companies/services/FileUploadService';
+import DeleteCampaignImgService from '@modules/companies/services/DeleteCampaignImgService';
 
 import UserStore from '@modules/users/infra/typeorm/entities/UserStore';
 import Store from '@modules/companies/infra/typeorm/entities/Store';
@@ -106,6 +107,12 @@ export default class CampaignsController {
     const campaignId = request.params.campaign_id;
 
     try {
+      const deleteImg = container.resolve(DeleteCampaignImgService);
+
+      await deleteImg.execute({
+        campaign_id: campaignId,
+      });
+
       const campaignsRepository = getRepository(Campaign);
 
       await campaignsRepository.delete(campaignId);
