@@ -5,8 +5,6 @@ import AppError from '@shared/errors/AppError';
 import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider';
 import ICampaignsRepository from '../repositories/ICampaignsRepository';
 
-import Campaign from '../infra/typeorm/entities/Campaign';
-
 interface IRequest {
   campaign_id: string;
 }

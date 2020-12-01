@@ -65,4 +65,18 @@ export default class TagsController {
 
     return response.status(200).json(tag);
   }
+
+  public async delete(request: Request, response: Response): Promise<Response> {
+    try {
+      const tagId = request.params.tag_id;
+
+      const tagsRepository = getRepository(Tag);
+
+      await tagsRepository.delete(tagId);
+
+      return response.status(200).send();
+    } catch (error) {
+      throw new AppError(error);
+    }
+  }
 }

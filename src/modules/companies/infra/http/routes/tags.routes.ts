@@ -14,4 +14,6 @@ tagsRouter.get('/:tag_id', tagsController.show);
 
 tagsRouter.post('/', tagsController.create);
 
+tagsRouter.delete('/:tag_id', tagsController.delete);
+
 export default tagsRouter;

@@ -5,8 +5,6 @@ import AppError from '@shared/errors/AppError';
 import IStorageProvider from '@shared/container/providers/StorageProvider/models/IStorageProvider';
 import IFilesRepository from '../repositories/IFilesRepository';
 
-import File from '../infra/typeorm/entities/File';
-
 interface IRequest {
   file_id: string;
 }
