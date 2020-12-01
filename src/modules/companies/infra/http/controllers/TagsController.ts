@@ -26,20 +26,18 @@ export default class TagsController {
 
     const tagsRepository = getRepository(Tag);
 
-    const tags = await tagsRepository
-      .createQueryBuilder('tag')
-      .leftJoinAndSelect(FileTags, 'filetag', 'filetag.tag_id = tag.id')
-      .where(`tag.store_owner_id = '${storeId}'`)
-      .select()
-      .getRawMany();
+    // const tags = await tagsRepository
+    //   .createQueryBuilder('tag')
+    //   .leftJoinAndSelect(FileTags, 'filetag', 'filetag.tag_id = tag.id')
+    //   .where(`tag.store_owner_id = '${storeId}'`)
+    //   .select()
+    //   .getRawMany();
+
+    const tags = await tagsRepository.find({
+      where: { store_owner_id: storeId },
+    });
 
     return response.json(tags);
-
-    // const tags = await tagsRepository.find({
-    //   where: { store_owner_id: storeId },
-    // });
-
-    // return response.json(tags);
   }
 
   public async show(request: Request, response: Response): Promise<Response> {
