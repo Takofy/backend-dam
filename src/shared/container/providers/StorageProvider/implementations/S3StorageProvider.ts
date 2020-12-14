@@ -1,8 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 import aws, { S3 } from 'aws-sdk';
-import { blobToBase64String } from 'blob-util';
-import { generateAsync } from 'jszip';
 import { zip } from 'zip-a-folder';
 import uploadConfig from '@config/upload';
 import IStorageProvider from '../models/IStorageProvider';
@@ -18,7 +16,11 @@ class DiskStorageProvider implements IStorageProvider {
 
   public async downloadFile(files: string): Promise<void> {
     // const originalPath = path.resolve(uploadConfig.tmpFolder, file);
-    const originalPath = path.resolve(`${uploadConfig.tmpFolder}/arquivo.png`);
+    // const originalPath = path.resolve(`${uploadConfig.tmpFolder}/arquivo.png`);
+    const pathFile = 'arquivo.png';
+    const originalPath = path.resolve(uploadConfig.tmpFolder, pathFile);
+    // console.log(originalPath);
+    // return;
 
     // Baixa ativo do S3 e salva no servidor
     await Promise.all(
@@ -32,25 +34,37 @@ class DiskStorageProvider implements IStorageProvider {
 
         const eTag = file.ETag.replace(/"/g, '');
 
+        const pathFolder = 'ativos';
+
         const originalFilePath = path.resolve(
-          `${uploadConfig.tmpFolder}/ativos/${fileName}`,
+          uploadConfig.tmpFolder,
+          pathFolder,
+          fileName,
         );
         const fileBody = file.Body;
         fs.writeFileSync(originalFilePath, fileBody);
       }),
     );
-    const originalFolderPath = path.resolve(`${uploadConfig.tmpFolder}`);
+    const originalFolderPath = path.resolve(uploadConfig.tmpFolder);
 
     // Zipa ativos
-    await zip(
-      `${originalFolderPath}/ativos`,
-      `${originalFolderPath}/zip/download-ativos.zip`,
-    );
+    const ativos = 'ativos';
+    const ativosPath = path.resolve(originalFolderPath, ativos);
+    const zipFolder = 'zip';
+    const zipName = 'download-ativos.zip';
+    const zipPath = path.resolve(originalFolderPath, zipFolder, zipName);
+    await zip(ativosPath, zipPath);
 
     // Exclui ativo(s) do servidor após de serem zipados
     await Promise.all(
       files.map(async fileName => {
-        await fs.promises.unlink(`${originalFolderPath}\\ativos/${fileName}`);
+        const fileUnlinkPath = path.resolve(
+          originalFolderPath,
+          ativos,
+          fileName,
+        );
+        await fs.promises.unlink(fileUnlinkPath);
+        // await fs.promises.unlink(`${originalFolderPath}\\ativos/${fileName}`);
       }),
     );
 
