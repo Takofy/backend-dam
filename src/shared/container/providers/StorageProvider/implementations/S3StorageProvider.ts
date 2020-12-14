@@ -68,7 +68,9 @@ class DiskStorageProvider implements IStorageProvider {
       }),
     );
 
-    const fileFinalPath = `${originalFolderPath}/zip/download-ativos.zip`;
+    const fileFinalPath = path.resolve(originalFolderPath, zipFolder, zipName);
+
+    // const fileFinalPath = `${originalFolderPath}/zip/download-ativos.zip`;
 
     return fileFinalPath;
   }
