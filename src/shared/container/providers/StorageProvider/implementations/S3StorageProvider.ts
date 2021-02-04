@@ -22,6 +22,8 @@ class DiskStorageProvider implements IStorageProvider {
     // console.log(originalPath);
     // return;
 
+    const isArray = files.length;
+
     // Baixa ativo do S3 e salva no servidor
     await Promise.all(
       files.map(async fileName => {

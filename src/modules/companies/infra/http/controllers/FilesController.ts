@@ -1,8 +1,17 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import { getRepository } from 'typeorm';
+
+import fs from 'fs';
+import path from 'path';
+import uploadConfig from '@config/upload';
+
+import gm from 'gm';
 import sizeOf from 'image-size';
 import { partial } from 'filesize';
+import { PDFDocument } from 'pdf-lib';
+// import { PDFImage } from 'pdf-image';
+// import { fromPath } from 'pdf2pic';
 
 import AppError from '@shared/errors/AppError';
 
@@ -60,11 +69,6 @@ export default class FilesController {
         // upload do ativo
         const fileUploadService = container.resolve(FileUploadService);
 
-        // Ler dimensões do ativo
-        const fileDimensions = sizeOf(file.path);
-        const fileWidh = fileDimensions.width;
-        const fileHeight = fileDimensions.height;
-
         // Tamanho do arquivo
         const size = partial({ locale: 'de' });
         const fileSize = size(file.size);
@@ -77,6 +81,90 @@ export default class FilesController {
 
         const fileMime = file.mimetype.toLowerCase().split('/').shift();
         const fileType = file.mimetype.toLowerCase().split('/').pop();
+
+        if (fileType === 'pdf') {
+          const pdfFile = await fs.promises.readFile(file.path);
+
+          // carrega pdf a partir dos bytes existentes do fs
+          const pdfDoc = await PDFDocument.load(pdfFile);
+          const pages = pdfDoc.getPages();
+          const firstPage = pages[0];
+          const { width, height } = firstPage.getSize();
+
+          // Ler dimensões do ativo
+          const fileWidh = String(width).split('.').shift();
+          const fileHeight = String(height).split('.').shift();
+
+          //   // Transformar PDF em Imagem
+          //   const imagePath = path.resolve(
+          //     uploadConfig.tmpFolder,
+          //     'converted.png',
+          //   );
+
+          //   gm(`${file.path}[0]`).thumb(
+          //     200, // Width
+          //     200, // Height
+          //     imagePath, // Output file name
+          //     80, // Quality from 0 to 100
+          //     function (error, stdout, stderr, command) {
+          //       if (!error) {
+          //         console.log(command);
+          //       } else {
+          //         console.log(error);
+          //       }
+          //     },
+          //   );
+
+          // const pdfImage = new PDFImage(file.path);
+          // const imagePath = path.resolve(
+          //   uploadConfig.tmpFolder,
+          //   'converted.png',
+          // );
+
+          // pdfImage.convertFile().then(function (imagePath) {});
+          // const imagePath = path.resolve(
+          //   uploadConfig.tmpFolder,
+          //   'converted.png',
+          // );
+
+          // const pdfImage = new PDFImage(file.path);
+
+          // const final = await pdfImage.convertPage(0).then(() => {
+          //   return response.sendFile(imagePath);
+          // });
+
+          // console.log(final);
+          // return;
+
+          // const options = {
+          //   density: 100,
+          //   // saveFilename: 's3FileName',
+          //   format: 'png',
+          //   width: 200,
+          // };
+
+          // const storeAsImage = fromPath(file.path, options);
+          // const pageToConvertAsImage = 1;
+
+          // console.log(storeAsImage);
+
+          // await storeAsImage(pageToConvertAsImage);
+        }
+
+        if (
+          fileType === 'jpg' ||
+          fileType === 'png' ||
+          fileType === 'jpeg' ||
+          fileType === 'gif' ||
+          fileType === 'webp' ||
+          fileType === 'svg' ||
+          fileType === 'tif'
+        ) {
+          // Ler dimensões do ativo
+          const fileDimensions = sizeOf(file.path);
+          const fileWidh = fileDimensions.width;
+          const fileHeight = fileDimensions.height;
+        }
 
         if (request.body.active) {
           const activeCheck = request.body.active;
@@ -109,6 +197,8 @@ export default class FilesController {
           user_owner_id: userId,
           store_owner_id: storeId,
           active: activeCheck || true,
+          path_thumbnail: request.body.path_thumbnail || '',
+          nm_status: request.body.nm_status || '',
         };
 
         const createFile = container.resolve(CreateFileService);
@@ -130,6 +220,8 @@ export default class FilesController {
       dt_expiration,
       campaign_owner_id,
       active,
+      path_thumbnail,
+      nm_status,
     } = request.body;
 
     const updateFileService = container.resolve(UpdateFileService);
@@ -141,6 +233,8 @@ export default class FilesController {
       dt_expiration,
       campaign_owner_id,
       active,
+      path_thumbnail,
+      nm_status,
     });
 
     return response.json(file);
@@ -165,4 +259,50 @@ export default class FilesController {
       throw new AppError(error);
     }
   }
+
+  public async all(request: Request, response: Response): Promise<Response> {
+    const filesRepository = getRepository(File);
+    const files = await filesRepository.find({
+      where: { active: true },
+      order: {
+        updated_at: 'DESC',
+      },
+    });
+
+    return response.json(files);
+  }
+
+  public async status(request: Request, response: Response): Promise<Response> {
+    const { status } = request.params;
+
+    const filesRepository = getRepository(File);
+    const files = await filesRepository.find({
+      where: { nm_status: status, active: true },
+      order: {
+        updated_at: 'DESC',
+      },
+    });
+
+    return response.json(files);
+  }
+
+  public async published(
+    request: Request,
+    response: Response,
+  ): Promise<Response> {}
+
+  public async scheduled(
+    request: Request,
+    response: Response,
+  ): Promise<Response> {}
+
+  public async holding(
+    request: Request,
+    response: Response,
+  ): Promise<Response> {}
+
+  public async archived(
+    request: Request,
+    response: Response,
+  ): Promise<Response> {}
 }

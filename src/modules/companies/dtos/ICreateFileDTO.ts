@@ -18,4 +18,6 @@ export default interface ICreateFileDTO {
   user_owner_id: string;
   store_owner_id: string;
   active: boolean;
+  path_thumbnail: string;
+  nm_status: string;
 }

@@ -22,20 +22,6 @@ export default class UserStoreController {
 
     const userStoreRepository = getRepository(UserStore);
 
-    // const storeId = await userStoreRepository
-    //   .createQueryBuilder('si')
-    //   .where(`si.user_id = '${userId}'`)
-    //   .select('si.store_id')
-    //   .getRawMany();
-
-    // const userStore = await userStoreRepository
-    //   .createQueryBuilder('us')
-    //   .leftJoinAndSelect(Store, 'store', 'store.id = us.store_id')
-    //   .leftJoinAndSelect(User, 'user', 'user.id = us.user_id')
-    //   .where(`us.user_id = '${userId}'`)
-    //   .select(['store', 'user'])
-    //   .getRawMany();
-
     const store = await userStoreRepository
       .createQueryBuilder('us')
       .leftJoinAndSelect(Store, 'store', 'store.id = us.store_id')
@@ -60,7 +46,7 @@ export default class UserStoreController {
     // This get User params (don't forget "store_id" is it below, after create user)
     const { user_id, store_id, active } = request.body;
 
-    // This call to CreateUserService that uses repository and typeorm to create a new User
+    // This call to CreateUserService that uses repository and typeorm to create a new UserStore
     const createUserStore = container.resolve(CreateUserStoreService);
 
     const userStore = await createUserStore.execute({

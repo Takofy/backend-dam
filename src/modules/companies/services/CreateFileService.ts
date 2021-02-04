@@ -25,6 +25,8 @@ interface IRequest {
   user_owner_id: string;
   store_owner_id: string;
   active: boolean;
+  path_thumbnail: string;
+  nm_status: string;
 }
 
 @injectable()
@@ -54,6 +56,8 @@ class CreateFileService {
     user_owner_id,
     store_owner_id,
     active,
+    path_thumbnail,
+    nm_status,
   }: IRequest): Promise<File> {
     const checkFileExists = await this.filesRepository.findByNameAndCampaign(
       nm_s3_version,
@@ -84,6 +88,8 @@ class CreateFileService {
       user_owner_id,
       store_owner_id,
       active,
+      path_thumbnail,
+      nm_status,
     });
 
     return file;

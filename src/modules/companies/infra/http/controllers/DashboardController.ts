@@ -4,6 +4,7 @@ import { getRepository } from 'typeorm';
 import UserStore from '@modules/users/infra/typeorm/entities/UserStore';
 import Store from '@modules/companies/infra/typeorm/entities/Store';
 import Campaign from '@modules/companies/infra/typeorm/entities/Campaign';
+import File from '@modules/companies/infra/typeorm/entities/File';
 
 export default class ProjectsController {
   // public async index(request: Request, response: Response): Promise<Response> {}
@@ -32,6 +33,19 @@ export default class ProjectsController {
       take: 10,
     });
 
-    return response.json(campaigns);
+    const filesRepository = getRepository(File);
+
+    const allFiles = await filesRepository.find({
+      where: { store_owner_id: storeId },
+    });
+
+    const activeFiles = await filesRepository.find({
+      where: { store_owner_id: storeId, active: true },
+    });
+
+    const countAllFiles = allFiles.length;
+    const countActiveFiles = activeFiles.length;
+
+    return response.json({ countAllFiles, countActiveFiles, campaigns });
   }
 }

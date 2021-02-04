@@ -12,6 +12,8 @@ interface IRequest {
   dt_expiration: Date;
   campaign_owner_id: string;
   active: boolean;
+  path_thumbnail: string;
+  nm_status: string;
 }
 
 @injectable()
@@ -28,6 +30,8 @@ class UpdateUserAvatarService {
     dt_expiration,
     campaign_owner_id,
     active,
+    path_thumbnail,
+    nm_status,
   }: IRequest): Promise<File> {
     const file = await this.filesRepository.findById(file_id);
 
@@ -49,6 +53,12 @@ class UpdateUserAvatarService {
     }
     if (active) {
       file.active = active;
+    }
+    if (path_thumbnail) {
+      file.path_thumbnail = path_thumbnail;
+    }
+    if (nm_status) {
+      file.nm_status = nm_status;
     }
 
     await this.filesRepository.save(file);

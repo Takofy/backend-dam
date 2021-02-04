@@ -11,6 +11,10 @@ const upload = multer(uploadConfig.multer);
 
 filesRouter.use(ensureAuthenticated);
 
+filesRouter.get('/all', filesController.all);
+
+filesRouter.get('/status/:status', filesController.status);
+
 filesRouter.get('/:campaign_id', filesController.index);
 
 filesRouter.get('/file/:file_id', filesController.show);

@@ -6,6 +6,8 @@ import IStorageProvider from './models/IStorageProvider';
 import DiskStorageProvider from './implementations/DiskStorageProvider';
 import S3StorageProvider from './implementations/S3StorageProvider';
 
+// import IMailProvider from '../MailProvider/models/IMailProvider';
+
 const providers = {
   disk: DiskStorageProvider,
   s3: S3StorageProvider,
@@ -14,4 +16,5 @@ const providers = {
 container.registerSingleton<IStorageProvider>(
   'StorageProvider',
   providers[uploadConfig.driver],
+  // DiskStorageProvider,
 );

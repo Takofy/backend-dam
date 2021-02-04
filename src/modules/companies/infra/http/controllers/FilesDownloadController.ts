@@ -15,10 +15,7 @@ export default class FilesDownloadController {
     const files = await filesRepository
       .createQueryBuilder('f')
       .where('f.id IN (:...ids)', {
-        ids: [
-          '5a55fa26-19f8-4a61-abef-def2639178fa',
-          '48015735-316d-4ed6-ac12-cc5b7a951546',
-        ],
+        ids: filesId,
       })
       .select(['f.nm_s3_name'])
       .getRawMany();
@@ -35,7 +32,7 @@ export default class FilesDownloadController {
 
     const file = await fileDownloadService.execute(filesArray);
 
-    return response.download(file);
+    return response.sendFile(file);
 
     // try {
     //   return response.status(200).send();

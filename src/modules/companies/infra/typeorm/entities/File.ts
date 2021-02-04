@@ -88,6 +88,12 @@ class File {
   @Column()
   active: boolean;
 
+  @Column()
+  path_thumbnail: string;
+
+  @Column()
+  nm_status: string;
+
   @CreateDateColumn()
   created_at: Date;
 
