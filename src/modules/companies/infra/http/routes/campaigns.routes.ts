@@ -20,6 +20,10 @@ campaignsRouter.post(
   campaignsController.create,
 );
 
-campaignsRouter.delete('/:campaign_id', campaignsController.delete);
+campaignsRouter.put('/:campaign_id', campaignsController.update);
+
+campaignsRouter.post('/delete', campaignsController.delete);
+
+// campaignsRouter.delete('/:campaign_id', campaignsController.delete);
 
 export default campaignsRouter;

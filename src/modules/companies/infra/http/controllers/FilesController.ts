@@ -78,6 +78,7 @@ export default class FilesController {
         const s3FileName = file.filename.replace(/\s/g, '+');
         const fileName = file.filename;
         const filePath = `${process.env.STORAGE_BASE_PATH}${s3FileName}`;
+        const thumbnailPath = `${process.env.STORAGE_BASE_RESIZED_PATH}resized-${s3FileName}`;
 
         const fileMime = file.mimetype.toLowerCase().split('/').shift();
         const fileType = file.mimetype.toLowerCase().split('/').pop();
@@ -197,7 +198,7 @@ export default class FilesController {
           user_owner_id: userId,
           store_owner_id: storeId,
           active: activeCheck || true,
-          path_thumbnail: request.body.path_thumbnail || '',
+          path_thumbnail: thumbnailPath || '',
           nm_status: request.body.nm_status || '',
         };
 
@@ -241,24 +242,49 @@ export default class FilesController {
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {
-    const fileId = request.params.file_id;
+    const fileIds = request.body.files;
 
     try {
-      const deleteFile = container.resolve(DeleteFileService);
+      await Promise.all(
+        fileIds.map(async fileId => {
+          const deleteFile = container.resolve(DeleteFileService);
 
-      await deleteFile.execute({
-        file_id: fileId,
-      });
+          await deleteFile.execute({
+            file_id: fileId,
+          });
 
-      const filesRepository = getRepository(File);
+          const filesRepository = getRepository(File);
 
-      await filesRepository.delete(fileId);
+          await filesRepository.delete(fileId);
+          return response.status(200).send();
+        }),
+      );
 
       return response.status(200).send();
     } catch (error) {
       throw new AppError(error);
     }
   }
+
+  // public async delete(request: Request, response: Response): Promise<Response> {
+  //   const fileId = request.params.file_id;
+
+  //   try {
+  //     const deleteFile = container.resolve(DeleteFileService);
+
+  //     await deleteFile.execute({
+  //       file_id: fileId,
+  //     });
+
+  //     const filesRepository = getRepository(File);
+
+  //     await filesRepository.delete(fileId);
+
+  //     return response.status(200).send();
+  //   } catch (error) {
+  //     throw new AppError(error);
+  //   }
+  // }
 
   public async all(request: Request, response: Response): Promise<Response> {
     const filesRepository = getRepository(File);

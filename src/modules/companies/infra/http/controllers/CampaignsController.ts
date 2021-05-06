@@ -6,6 +6,7 @@ import AppError from '@shared/errors/AppError';
 
 import CreateCampaignService from '@modules/companies/services/CreateCampaignService';
 import FileUploadService from '@modules/companies/services/FileUploadService';
+import UpdateCampaignService from '@modules/companies/services/UpdateCampaignService';
 import DeleteCampaignImgService from '@modules/companies/services/DeleteCampaignImgService';
 
 import UserStore from '@modules/users/infra/typeorm/entities/UserStore';
@@ -103,23 +104,85 @@ export default class CampaignsController {
     return response.json(campaign);
   }
 
+  public async update(request: Request, response: Response): Promise<Response> {
+    const {
+      nm_campaign_name,
+      nm_campaign_description,
+      path_image,
+      path_icon,
+      dt_publication,
+      dt_expiration,
+      user_owner_id,
+      store_owner_id,
+      active,
+    } = request.body;
+
+    const { campaign_id } = request.params;
+
+    const updateCampaignService = container.resolve(UpdateCampaignService);
+
+    const campaign = await updateCampaignService.execute({
+      campaign_id,
+      nm_campaign_name,
+      nm_campaign_description,
+      path_image,
+      path_icon,
+      dt_publication,
+      dt_expiration,
+      user_owner_id,
+      store_owner_id,
+      active,
+    });
+
+    return response.json(campaign);
+  }
+
   public async delete(request: Request, response: Response): Promise<Response> {
-    const campaignId = request.params.campaign_id;
+    const campaignIds = request.body.campaigns;
+
+    // console.log(campaignIds);
+    // return;
 
     try {
-      const deleteImg = container.resolve(DeleteCampaignImgService);
+      await Promise.all(
+        campaignIds.map(async campaignId => {
+          const deleteImg = container.resolve(DeleteCampaignImgService);
 
-      await deleteImg.execute({
-        campaign_id: campaignId,
-      });
+          await deleteImg.execute({
+            campaign_id: campaignId,
+          });
 
-      const campaignsRepository = getRepository(Campaign);
+          const campaignsRepository = getRepository(Campaign);
 
-      await campaignsRepository.delete(campaignId);
+          await campaignsRepository.delete(campaignId);
+
+          return response.status(200).send();
+        }),
+      );
 
       return response.status(200).send();
     } catch (error) {
       throw new AppError(error);
     }
   }
+
+  // public async delete(request: Request, response: Response): Promise<Response> {
+  //   const campaignId = request.params.campaign_id;
+
+  //   try {
+  //     const deleteImg = container.resolve(DeleteCampaignImgService);
+
+  //     await deleteImg.execute({
+  //       campaign_id: campaignId,
+  //     });
+
+  //     const campaignsRepository = getRepository(Campaign);
+
+  //     await campaignsRepository.delete(campaignId);
+
+  //     return response.status(200).send();
+  //   } catch (error) {
+  //     throw new AppError(error);
+  //   }
+  // }
 }
